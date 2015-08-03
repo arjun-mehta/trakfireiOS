@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <script src="test.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    </head>
+    
+    <body>
+        
+    <br><br>
+    <input type="button" href="#" id="stream" class="big button" value="Stream" />
+
+    <script>
+        SC.initialize({
+            client_id: '8f3c9a26a2975409bfc5f52f8fcbb1ae'
+        });
+                  
+        $("#stream").click(function(){
+            SC.stream("/tracks/194770111", function(sound){
+                sound.play();
+                console.log("button clicked");
+            });
+        });
+    </script>
+
+    </body>
+</html>
