@@ -23,8 +23,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let limit = [10] as NSArray
         meteorClient.addSubscription("customPublication", withParameters: limit as [AnyObject])
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reportConnection", name: MeteorClientDidConnectNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reportDisconnection", name: MeteorClientDidDisconnectNotification, object: nil)
 
         return true
+    }
+    
+    func reportConnection() {
+        println("================> connected to server!")
+    }
+    
+    func reportDisconnection() {
+        println("================> disconnected from server!")
     }
     
     func applicationWillResignActive(application: UIApplication) {

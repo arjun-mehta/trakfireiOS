@@ -11,6 +11,8 @@ import UIKit
 class MusicTableViewController: UITableViewController {
     
     private let meteor = (UIApplication.sharedApplication().delegate as! AppDelegate).meteorClient
+    
+    var posts: M13OrderedDictionary!
 
     var userInfoList:[User]!
    
@@ -40,39 +42,34 @@ class MusicTableViewController: UITableViewController {
         
     }
     
-
-    
-//        let parameters = [usersToPing, rawPing] as NSArray
-//        
-//        meteor.callMethodName("addPing", parameters: parameters as [AnyObject], responseCallback:{( response,  error) in
-//            if (error != nil) {
-//                println("failed")
-//                return
-//            }
-//            println("sucess")
-//        })
-
-    
     @IBAction func button(sender: AnyObject) {
-        
+         posts = meteor.collections["posts"] as? M13OrderedDictionary
         if let user = meteor.collections["users"] as? M13OrderedDictionary{
             //println(user.description)
             //println(user.objectAtIndex(0)["slug"])
         }
 
         if let posts = meteor.collections["posts"] as? M13OrderedDictionary{
-            println(posts.description)
+            //println(posts.description)
+            println(posts.objectAtIndex(0)["title"])
+            println(posts.objectAtIndex(1)["title"])
+            println(posts.objectAtIndex(2)["title"])
+            println(posts.objectAtIndex(3)["title"])
+        
         }
         
             // Zachs code
             // friendsList = user.objectAtIndex(0)["FriendsList"] as! [Friends]
-
+        
+        tableView.reloadData()
         
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        posts = meteor.collections["posts"] as? M13OrderedDictionary
+
         //meteor.addSubscription("posts")
       
         //self.tableView.registerClass(TrackCell.self, forCellReuseIdentifier: "TrackCell")
@@ -100,15 +97,29 @@ class MusicTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return 2
+        
+        if let posts1 = posts{
+            return Int(posts1.count())
+        }
+        
+        return 0
+        
     }
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("TrackCell", forIndexPath: indexPath) as! TrackCell
 
         // Configure the cell...
         
+        if let posts = posts{
+            
+            if let postsCheck2 = posts.objectAtIndex(UInt(indexPath.row))["title"] as? String {
+            cell.songTitle.text = postsCheck2
+            }
+            
+        }
         //cell.loadAddressURL()
         return cell
     }
