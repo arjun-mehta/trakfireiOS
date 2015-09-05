@@ -15,7 +15,8 @@
         });
                   
         $("#stream").click(function(){
-            SC.stream("/tracks/194770111", function(sound){
+            console.log("button clicked outside");
+            SC.stream("/tracks/154798838", function(sound){
                 sound.play();
                 console.log("button clicked");
             });

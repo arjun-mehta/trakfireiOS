@@ -11,10 +11,15 @@ import UIKit
 
 class TrackCell: UITableViewCell, NSURLSessionDelegate {
     
+    private let meteor = (UIApplication.sharedApplication().delegate as! AppDelegate).meteorClient
+    
     @IBOutlet weak var WebView: UIWebView!
     @IBOutlet weak var songTitle: UILabel!
+    @IBOutlet weak var upvoteCount: UILabel!
+    
+    
     @IBAction func playButton(sender: UIButton) {
-        var urlToCall = "http://puu.sh/jf3Wo/8716f43b8c.mp3"
+        var urlToCall = "https://ec-preview-media.sndcdn.com/preview/0/90/LgRCTywpLWGZ.128.mp3?f10880d39085a94a0418a7e162b03d52e21adf826af17a391e1b74103a2599f794c79eb1879c39e4827deeb2bc29910a9e1ec0c7fe2f6248815c33f5b8a38df788ae383535f1bf78fd1be1fee71c91ac484a"
         
         var audioPlayer: STKAudioPlayer = STKAudioPlayer()
         audioPlayer.play(urlToCall)
@@ -23,7 +28,26 @@ class TrackCell: UITableViewCell, NSURLSessionDelegate {
     
     var session:NSURLSession!
     
-    
+    private func upvote(){
+        
+        if let posts = meteor.collections["posts"] as? M13OrderedDictionary{
+            
+            let parameter = posts.objectAtIndex(0)["_id"] //as NSArray
+            //println(parameter!!.description)
+            let parameters = [parameter!!.description] as NSArray
+            
+            meteor.callMethodName("upvotePost", parameters: parameters as [AnyObject] , responseCallback:{( response, error) in
+                
+                if (error != nil) {
+                    println("failed")
+                    return
+                }
+                println("sucess")
+                
+            })
+        }
+    }
+
     func URLSession(session: NSURLSession!, downloadTask: NSURLSessionDownloadTask!, didFinishDownloadingToURL location: NSURL!) {
         println("done")
         println(location)

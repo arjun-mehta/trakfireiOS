@@ -15,10 +15,16 @@ class MusicTableViewController: UITableViewController {
     var posts: M13OrderedDictionary!
 
     var userInfoList:[User]!
-   
+    
+    @IBAction func upvote(sender: UIButton) {
+      
+    }
+    
+        
     @IBAction func signIn(sender: AnyObject) {
         signIn()
     }
+    
     
     func signIn(){
         if !meteor.websocketReady {
@@ -50,16 +56,13 @@ class MusicTableViewController: UITableViewController {
         }
 
         if let posts = meteor.collections["posts"] as? M13OrderedDictionary{
-            //println(posts.description)
-            println(posts.objectAtIndex(0)["title"])
-            println(posts.objectAtIndex(1)["title"])
-            println(posts.objectAtIndex(2)["title"])
-            println(posts.objectAtIndex(3)["title"])
+            println(posts.description)
+//            println(posts.objectAtIndex(0)["title"])
+//            println(posts.objectAtIndex(1)["title"])
+//            println(posts.objectAtIndex(2)["title"])
+//            println(posts.objectAtIndex(3)["title"])
         
         }
-        
-            // Zachs code
-            // friendsList = user.objectAtIndex(0)["FriendsList"] as! [Friends]
         
         tableView.reloadData()
         
@@ -79,6 +82,18 @@ class MusicTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didReceiveUpdate:", name: "posts_added", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didReceiveUpdate:", name: "posts_removed", object: nil)
+
+    }
+    
+    func didReceiveUpdate(notification:NSNotification) {
+        println("did receive update")
+        tableView.reloadData()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -117,6 +132,10 @@ class MusicTableViewController: UITableViewController {
             
             if let postsCheck2 = posts.objectAtIndex(UInt(indexPath.row))["title"] as? String {
             cell.songTitle.text = postsCheck2
+            }
+            
+            if let postsCheck3 = posts.objectAtIndex(UInt(indexPath.row))["upvotes"] as? NSInteger {
+                cell.upvoteCount.text = "\(postsCheck3)"
             }
             
         }

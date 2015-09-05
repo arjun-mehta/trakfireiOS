@@ -21,8 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let parameters = ["CTghKi5shr3zqF4ZK"] as NSArray
         meteorClient.addSubscription("singleUser", withParameters: parameters as [AnyObject])
         
-        let limit = [10] as NSArray
-        meteorClient.addSubscription("customPublication", withParameters: limit as [AnyObject])
+//        let limit = [15] as NSArray
+//        meteorClient.addSubscription("customPublication", withParameters: limit as [AnyObject])
+        
+        let termsDict:[String:String] = ["view":"singleDay","date":"08/05/2015", "after": "08/05/2015","before": "08/06/2015"]
+        let termsArray: NSArray = [termsDict]
+        meteorClient.addSubscription("postsList", withParameters: termsArray as [AnyObject])
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reportConnection", name: MeteorClientDidConnectNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reportDisconnection", name: MeteorClientDidDisconnectNotification, object: nil)
